@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sonar-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: sonarqube
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+spec:
+  tls:
+  - hosts:
+    - sonar.example.com
+    secretName: sonarqube
+  rules:
+  - host: sonar.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: sonarqube-service
+          servicePort: 9000
